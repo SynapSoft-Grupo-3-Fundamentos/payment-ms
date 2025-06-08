@@ -1,0 +1,34 @@
+services:
+  payment-microservice:
+     image: payment-microservice
+     build:
+         context: .
+         dockerfile: Dockerfile
+     container_name: payment-microservice
+     ports:
+       - "8091:8091"
+     environment:
+       - SPRING_PROFILES_ACTIVE=prod
+     depends_on:
+       - payment-db
+     networks:
+         - app-network
+     restart:
+      always
+  payment-db:
+    image: postgres:latest
+    container_name: payment-db
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: payment-db
+    restart: always
+    networks:
+       -  app-network
+networks:
+    app-network:
+      external: true
+
+
